@@ -87,10 +87,12 @@ public class Controller {
         spinMin.setValueFactory(minFactory);
     }
 
+    public void confirmChart(){
+        generateArr(spinCount.getValue(), spinMax.getValue(), spinMin.getValue());
+        generateChart();
+    }
     public void sort() throws InterruptedException {
-        if (sort != null && sort != "") {
-            generateArr(spinCount.getValue(), spinMax.getValue(), spinMin.getValue());
-            generateChart();
+        if (sort != null && sort != "" && arr!=null) {
             switch (sort) {
                 case "quick" -> quickSort(arr, 0, arr.length - 1);
                 case "heap" -> heapSort(arr);
