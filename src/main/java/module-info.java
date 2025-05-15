@@ -1,8 +1,8 @@
-module com.example.sortingdisplay {
+module pl.gornik.sortingdisplay {
     requires javafx.controls;
     requires javafx.fxml;
 
 
-    opens com.example.sortingdisplay to javafx.fxml;
-    exports com.example.sortingdisplay;
+    opens pl.gornik.sortingdisplay to javafx.fxml;
+    exports pl.gornik.sortingdisplay;
 }

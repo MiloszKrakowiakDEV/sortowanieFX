@@ -1,4 +1,4 @@
-package com.example.sortingdisplay;
+package pl.gornik.sortingdisplay;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
