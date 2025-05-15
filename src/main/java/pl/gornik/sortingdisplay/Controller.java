@@ -42,7 +42,8 @@ public class Controller {
     private String sort;
 
     private XYChart.Series<String, Integer> series;
-    public void initialize(){
+
+    public void initialize() {
         chartArray.getXAxis().setLabel("Index");
         chartArray.getYAxis().setLabel("Value");
         chartArray.setTitle("Array sorting");
@@ -57,29 +58,29 @@ public class Controller {
             if (newVal != null) {
                 switch (newVal) {
                     case "Bubble sort" -> {
-                        sort="bubble";
+                        sort = "bubble";
                     }
                     case "Selection sort" -> {
-                        sort="selection";
+                        sort = "selection";
                     }
                     case "Insertion sort" -> {
-                        sort="insertion";
+                        sort = "insertion";
                     }
                     case "Heap sort" -> {
-                        sort="heap";
+                        sort = "heap";
                     }
                     case "Quick sort" -> {
-                        sort="quick";
+                        sort = "quick";
                     }
                 }
             }
         });
         chartArray.setAnimated(false);
-        SpinnerValueFactory.IntegerSpinnerValueFactory countFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100,1000);
+        SpinnerValueFactory.IntegerSpinnerValueFactory countFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 1000);
         countFactory.setAmountToStepBy(100);
         spinCount.setValueFactory(countFactory);
-        SpinnerValueFactory.IntegerSpinnerValueFactory minFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(10,100);
-        SpinnerValueFactory.IntegerSpinnerValueFactory maxFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100,1000);
+        SpinnerValueFactory.IntegerSpinnerValueFactory minFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 100);
+        SpinnerValueFactory.IntegerSpinnerValueFactory maxFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 1000);
         minFactory.setAmountToStepBy(10);
         maxFactory.setAmountToStepBy(100);
         spinMax.setValueFactory(maxFactory);
@@ -87,15 +88,15 @@ public class Controller {
     }
 
     public void sort() throws InterruptedException {
-        if(sort!=null && sort !=""){
-            generateArr(spinCount.getValue(),spinMax.getValue(),spinMin.getValue());
+        if (sort != null && sort != "") {
+            generateArr(spinCount.getValue(), spinMax.getValue(), spinMin.getValue());
             generateChart();
-            switch(sort){
-                case "quick"-> quickSort(arr,0,arr.length-1);
+            switch (sort) {
+                case "quick" -> quickSort(arr, 0, arr.length - 1);
                 case "heap" -> heapSort(arr);
                 case "insertion" -> insertionSort(arr);
-                case "selection"-> selectionSort(arr);
-                case "bubble"-> bubbleSort(arr);
+                case "selection" -> selectionSort(arr);
+                case "bubble" -> bubbleSort(arr);
             }
         }
     }
@@ -106,13 +107,14 @@ public class Controller {
         }
     }
 
-    public void generateArr(int size, int max, int min){
-        arr =  new Integer [size];
+    public void generateArr(int size, int max, int min) {
+        arr = new Integer[size];
         Random rand = new Random();
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = rand.nextInt(min,max+1);
+            arr[i] = rand.nextInt(min, max + 1);
         }
     }
+
     public void generateChart() {
         chartArray.getData().clear();
         ((CategoryAxis) chartArray.getXAxis()).getCategories().clear();
@@ -126,6 +128,7 @@ public class Controller {
 
         chartArray.getData().add(series);
     }
+
     public void bubbleSort(Integer[] arr) {
         new Thread(() -> {
             int n = arr.length;
@@ -136,14 +139,12 @@ public class Controller {
                         arr[j] = arr[j + 1];
                         arr[j + 1] = temp;
 
-                        // Update chart on UI thread
-                        int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray(); // copy for thread safety
+                        int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
                         javafx.application.Platform.runLater(() -> {
                             updateChart();
                         });
-
                         try {
-                            Thread.sleep(1); // small delay for visual effect
+                            Thread.sleep(1);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -155,7 +156,7 @@ public class Controller {
 
 
     public void selectionSort(Integer[] arr) {
-        new Thread(()->{
+        new Thread(() -> {
             int n = arr.length;
             for (int i = 0; i < n; i++) {
                 int minIndex = i;
@@ -164,17 +165,16 @@ public class Controller {
                         minIndex = j;
                     }
                 }
-                // Swap arr[i] and arr[minIndex]
                 int temp = arr[i];
                 arr[i] = arr[minIndex];
                 arr[minIndex] = temp;
-                int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray(); // copy for thread safety
+                int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
                 javafx.application.Platform.runLater(() -> {
                     updateChart();
                 });
 
                 try {
-                    Thread.sleep(10); // small delay for visual effect
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -185,22 +185,21 @@ public class Controller {
 
 
     public void insertionSort(Integer[] arr) {
-        new Thread(()->{
+        new Thread(() -> {
             int n = arr.length;
             for (int i = 1; i < n; i++) {
                 int key = arr[i];
                 int j = i - 1;
-                // Move elements greater than key one position ahead
                 while (j >= 0 && arr[j] > key) {
                     arr[j + 1] = arr[j];
                     j--;
-                    int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray(); // copy for thread safety
+                    int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
                     javafx.application.Platform.runLater(() -> {
                         updateChart();
                     });
 
                     try {
-                        Thread.sleep(10); // small delay for visual effect
+                        Thread.sleep(10);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -211,8 +210,8 @@ public class Controller {
     }
 
 
-    public  void quickSort(Integer[] arr, int low, int high) {
-        new Thread(()->{
+    public void quickSort(Integer[] arr, int low, int high) {
+        new Thread(() -> {
             if (low < high) {
                 int pivotIndex = partition(arr, low, high);
                 quickSort(arr, low, pivotIndex - 1);
@@ -222,7 +221,7 @@ public class Controller {
     }
 
     private int partition(Integer[] arr, int low, int high) {
-        int pivot = arr[high];  // choosing the last element as pivot
+        int pivot = arr[high];
         int i = low - 1;
         for (int j = low; j < high; j++) {
             if (arr[j] < pivot) {
@@ -230,19 +229,18 @@ public class Controller {
                 int temp = arr[i];
                 arr[i] = arr[j];
                 arr[j] = temp;
-                int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray(); // copy for thread safety
+                int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
                 javafx.application.Platform.runLater(() -> {
                     updateChart();
                 });
 
                 try {
-                    Thread.sleep(10); // small delay for visual effect
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }
-        // Swap pivot to correct position
         int temp = arr[i + 1];
         arr[i + 1] = arr[high];
         arr[high] = temp;
@@ -251,22 +249,15 @@ public class Controller {
     }
 
     public void heapSort(Integer[] arr) {
-        new Thread(()->{
+        new Thread(() -> {
             int n = arr.length;
-
-            // Build max heap
             for (int i = n / 2 - 1; i >= 0; i--) {
                 heapify(arr, n, i);
             }
-
-            // One by one extract elements from heap
             for (int i = n - 1; i > 0; i--) {
-                // Move current root to end
                 int temp = arr[0];
                 arr[0] = arr[i];
                 arr[i] = temp;
-
-                // call max heapify on the reduced heap
                 heapify(arr, i, 0);
             }
         }).start();
@@ -288,18 +279,16 @@ public class Controller {
             int swap = arr[i];
             arr[i] = arr[largest];
             arr[largest] = swap;
-            int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray(); // copy for thread safety
+            int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
             javafx.application.Platform.runLater(() -> {
                 updateChart();
             });
 
             try {
-                Thread.sleep(10); // small delay for visual effect
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            // Recursively heapify the affected sub-tree
             heapify(arr, n, largest);
         }
     }
