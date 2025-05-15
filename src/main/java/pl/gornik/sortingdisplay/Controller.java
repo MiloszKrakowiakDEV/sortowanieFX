@@ -1,22 +1,18 @@
 package pl.gornik.sortingdisplay;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Controller {
     @FXML
@@ -36,9 +32,7 @@ public class Controller {
 
     private Integer[] arr;
 
-    private int size;
-    private int min;
-    private int max;
+
     private String sort;
 
     private XYChart.Series<String, Integer> series;
@@ -57,21 +51,11 @@ public class Controller {
         comboSort.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 switch (newVal) {
-                    case "Bubble sort" -> {
-                        sort = "bubble";
-                    }
-                    case "Selection sort" -> {
-                        sort = "selection";
-                    }
-                    case "Insertion sort" -> {
-                        sort = "insertion";
-                    }
-                    case "Heap sort" -> {
-                        sort = "heap";
-                    }
-                    case "Quick sort" -> {
-                        sort = "quick";
-                    }
+                    case "Bubble sort" -> sort = "bubble";
+                    case "Selection sort" -> sort = "selection";
+                    case "Insertion sort" -> sort = "insertion";
+                    case "Heap sort" -> sort = "heap";
+                    case "Quick sort" -> sort = "quick";
                 }
             }
         });
@@ -91,8 +75,8 @@ public class Controller {
         generateArr(spinCount.getValue(), spinMax.getValue(), spinMin.getValue());
         generateChart();
     }
-    public void sort() throws InterruptedException {
-        if (sort != null && sort != "" && arr!=null) {
+    public void sort() {
+        if (sort != null && !sort.isEmpty() && arr!=null) {
             switch (sort) {
                 case "quick" -> quickSort(arr, 0, arr.length - 1);
                 case "heap" -> heapSort(arr);
@@ -100,6 +84,7 @@ public class Controller {
                 case "selection" -> selectionSort(arr);
                 case "bubble" -> bubbleSort(arr);
             }
+            System.out.println(Arrays.toString(arr));
         }
     }
 
@@ -141,7 +126,7 @@ public class Controller {
                         arr[j] = arr[j + 1];
                         arr[j + 1] = temp;
 
-                        int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
+                        Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
                         javafx.application.Platform.runLater(() -> {
                             updateChart();
                         });
@@ -195,7 +180,7 @@ public class Controller {
                 while (j >= 0 && arr[j] > key) {
                     arr[j + 1] = arr[j];
                     j--;
-                    int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
+                    Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
                     javafx.application.Platform.runLater(() -> {
                         updateChart();
                     });
@@ -281,7 +266,7 @@ public class Controller {
             int swap = arr[i];
             arr[i] = arr[largest];
             arr[largest] = swap;
-            int[] snapshot = Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
+            Arrays.stream(arr).mapToInt(Integer::intValue).toArray();
             javafx.application.Platform.runLater(() -> {
                 updateChart();
             });
